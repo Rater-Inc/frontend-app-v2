@@ -36,22 +36,6 @@ const MetricsSetup: React.FC<MetricsSetupProps> = ({ data, onUpdate, onNext, onB
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
-      <div className="space-y-4">
-        {data.metrics.map((metric, index) => (
-          <div key={index} className="p-4 bg-gray-50 rounded-lg relative group">
-            <button
-              type="button"
-              onClick={() => removeMetric(index)}
-              className="absolute right-2 top-2 p-1 bg-white rounded-full shadow opacity-0 group-hover:opacity-100 transition-opacity"
-            >
-              <X className="h-4 w-4 text-gray-500" />
-            </button>
-            <h4 className="font-medium text-gray-900">{metric.name}</h4>
-            <p className="text-sm text-gray-600">{metric.description}</p>
-            <p className="text-sm text-gray-500 mt-1">Max score: {metric.maxScore}</p>
-          </div>
-        ))}
-      </div>
 
       <div className="p-4 border-2 border-dashed border-gray-200 rounded-lg">
         <div className="grid grid-cols-2 gap-4 mb-4">
@@ -101,6 +85,23 @@ const MetricsSetup: React.FC<MetricsSetupProps> = ({ data, onUpdate, onNext, onB
           <Plus className="h-4 w-4" />
           Add Metric
         </button>
+      </div>
+
+      <div className="space-y-4">
+        {data.metrics.map((metric, index) => (
+          <div key={index} className="p-4 bg-gray-50 rounded-lg relative group">
+            <button
+              type="button"
+              onClick={() => removeMetric(index)}
+              className="absolute right-2 top-2 p-1 bg-white rounded-full shadow opacity-0 group-hover:opacity-100 transition-opacity"
+            >
+              <X className="h-4 w-4 text-gray-500" />
+            </button>
+            <h4 className="font-medium text-gray-900">{metric.name}</h4>
+            <p className="text-sm text-gray-600">{metric.description}</p>
+            <p className="text-sm text-gray-500 mt-1">Max score: {metric.maxScore}</p>
+          </div>
+        ))}
       </div>
 
       <div className="flex justify-between">
