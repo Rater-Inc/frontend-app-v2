@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { X, Star, ChevronLeft, ChevronRight } from 'lucide-react';
-import RatingSlider from './RatingSlider';
+import RatingStars from './RatingStars';
 
 interface RatingModalProps {
   onClose: () => void;
@@ -14,9 +14,9 @@ const mockMembers = [
 ];
 
 const mockMetrics = [
-  { id: 1, name: 'Teamwork', description: 'Ability to work with others', maxScore: 10 },
-  { id: 2, name: 'Communication', description: 'Clear and effective communication', maxScore: 10 },
-  { id: 3, name: 'Leadership', description: 'Taking initiative and guiding others', maxScore: 10 },
+  { id: 1, name: 'Teamwork', description: 'Ability to work with others', maxScore: 5 },
+  { id: 2, name: 'Communication', description: 'Clear and effective communication', maxScore: 5 },
+  { id: 3, name: 'Leadership', description: 'Taking initiative and guiding others', maxScore: 5 },
 ];
 
 const RatingModal: React.FC<RatingModalProps> = ({ onClose }) => {
@@ -75,28 +75,24 @@ const RatingModal: React.FC<RatingModalProps> = ({ onClose }) => {
 
           <div className="space-y-8">
             {mockMetrics.map(metric => (
-              <div key={metric.id} className="space-y-2">
-                <div className="flex justify-between items-center">
-                  <div>
-                    <h4 className="font-medium text-gray-900">{metric.name}</h4>
-                    <p className="text-sm text-gray-500">{metric.description}</p>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <Star className="h-4 w-4 text-yellow-400 fill-yellow-400" />
-                    <span className="font-medium">
-                      {ratings[`${currentMember.id}-${metric.id}`] || 0}
-                    </span>
-                    <span className="text-gray-400">/ {metric.maxScore}</span>
-                  </div>
+              <div key={metric.id} className="flex items-center justify-between py-4 border-b border-gray-100 last:border-0">
+                <div>
+                  <h4 className="font-medium text-gray-900">{metric.name}</h4>
+                  <p className="text-sm text-gray-500">{metric.description}</p>
                 </div>
-                <RatingSlider
-                  max={metric.maxScore}
-                  value={ratings[`${currentMember.id}-${metric.id}`] || 0}
-                  onChange={(value) => handleRatingChange(metric.id, value)}
-                />
+                <div>
+                  <RatingStars
+                    max={metric.maxScore}
+                    value={ratings[`${currentMember.id}-${metric.id}`] || 0}
+                    onChange={(value) => handleRatingChange(metric.id, value)}
+                  />
+                  <p className="text-sm text-center text-gray-500 mt-1">
+                    {ratings[`${currentMember.id}-${metric.id}`] || 0} / {metric.maxScore}
+                  </p>
+                </div>
               </div>
             ))}
-          </div>
+            </div>
 
           <div className="flex justify-between mt-8">
             <button
