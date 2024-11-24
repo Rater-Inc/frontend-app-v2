@@ -3,10 +3,12 @@ import { Star, Users, ArrowRight } from 'lucide-react';
 import ActionButton from './ActionButton';
 import CreateSpaceModal from './CreateSpace/CreateSpaceModal';
 import RatingModal from './Rating/RatingModal';
+import JoinSpaceModal from './JoinSpace/JoinSpaceModal';
 
 const LandingPage = () => {
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showRatingModal, setShowRatingModal] = useState(false);
+  const [showJoinModal, setShowJoinModal] = useState(false);
 
   return (
     <>
@@ -38,7 +40,7 @@ const LandingPage = () => {
               </ActionButton>
 
               <ActionButton
-                onClick={() => setShowRatingModal(true)}
+                onClick={() => setShowJoinModal(true)}
                 icon={<ArrowRight className="h-5 w-5" />}
                 variant="secondary"
               >
@@ -55,6 +57,16 @@ const LandingPage = () => {
 
       {showCreateModal && (
         <CreateSpaceModal onClose={() => setShowCreateModal(false)} />
+      )}
+
+      {showJoinModal && (
+        <JoinSpaceModal
+          onClose={() => setShowJoinModal(false)}
+          onSuccess={() => {
+            setShowJoinModal(false);
+            setShowRatingModal(true);
+          }}
+        />
       )}
 
       {showRatingModal && (
