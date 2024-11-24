@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Plus, X } from 'lucide-react';
-import { SpaceData } from '../CreateSpaceModal';
+import { SpaceData } from '../../../types/types';
 
 interface MembersSetupProps {
   data: SpaceData;

@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Check, Link, Star, ChevronRight } from 'lucide-react';
-import { SpaceData } from '../CreateSpaceModal';
+import { SpaceData } from '../../types/types';
+
+import { useNavigate } from 'react-router-dom';
 
 interface ReviewSpaceProps {
   data: SpaceData;
@@ -9,6 +11,7 @@ interface ReviewSpaceProps {
 }
 
 const ReviewSpace: React.FC<ReviewSpaceProps> = ({ data, onBack, onSubmit }) => {
+  const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [spaceUrl, setSpaceUrl] = useState<string | null>(null);
 
@@ -57,14 +60,14 @@ const ReviewSpace: React.FC<ReviewSpaceProps> = ({ data, onBack, onSubmit }) => 
 
         <div className="flex justify-center gap-4">
           <button
-            onClick={() => window.location.href = `${spaceUrl}/rate`}
+            onClick={() => navigate(`/rate`)}
             className="px-6 py-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg hover:shadow-lg transition-all duration-300 flex items-center gap-2"
           >
             <Star className="h-4 w-4" />
             Start Rating
           </button>
           <button
-            onClick={() => window.location.href = `${spaceUrl}/results`}
+            onClick={() => navigate(`/results/overall`)}
             className="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-all duration-300 flex items-center gap-2"
           >
             <ChevronRight className="h-4 w-4" />

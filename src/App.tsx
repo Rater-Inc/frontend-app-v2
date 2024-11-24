@@ -1,5 +1,11 @@
 import React from 'react';
-import LandingPage from './components/LandingPage';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import LandingPage from './pages/LandingPage';
+import CreateSpacePage from './pages/CreateSpacePage';
+import SelectionPage from './pages/SelectionPage';
+import RatingPage from './pages/RatingPage';
+import OverallResultsPage from './pages/OverallResultsPage';
+import IndividualResultsPage from './pages/IndividualResultsPage';
 
 function App() {
   return (
@@ -11,19 +17,22 @@ function App() {
             backgroundImage:
                 "url('https://gartic.io/static/images/new/textura.png')",
             backgroundRepeat: "repeat",
-            transformOrigin: "center",
-            width: "200%",
-            height: "200%",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%) rotate(345deg)",
-            opacity: 0.5, // Optional: adjust opacity as needed
+            opacity: 0.7,
         }}
     ></div>
 
     {/* Content container */}
     <div className="relative z-10">
-        <LandingPage />
+    <BrowserRouter>
+    <Routes>
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/create-space" element={<CreateSpacePage />} />
+          <Route path="/select-action" element={<SelectionPage />} />
+          <Route path="/rate" element={<RatingPage />} />
+          <Route path="/results/overall" element={<OverallResultsPage />} />
+          <Route path="/results/individual" element={<IndividualResultsPage />} />
+        </Routes>
+    </BrowserRouter>
     </div>
 </div>
   );
