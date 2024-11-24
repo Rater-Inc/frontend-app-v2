@@ -75,7 +75,6 @@ const JoinSpaceModal: React.FC<JoinSpaceModalProps> = ({ onClose, onSuccess }) =
           <ActionButton
             type="submit"
             variant="primary"
-            className="w-full"
             disabled={isLoading}
           >
             {isLoading ? 'Verifying...' : 'Join Space'}

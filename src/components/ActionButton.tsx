@@ -1,16 +1,20 @@
 import React from 'react';
 
 interface ActionButtonProps {
+  type?: 'button' | 'submit' | 'reset';
   children: React.ReactNode;
   icon?: React.ReactNode;
   variant?: 'primary' | 'secondary';
-  onClick: () => void;
+  disabled?: boolean;
+  onClick?: () => void;
 }
 
 const ActionButton: React.FC<ActionButtonProps> = ({
+  type,
   children,
   icon,
   variant = 'primary',
+  disabled,
   onClick,
 }) => {
   const baseStyles = "w-full flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-semibold transition-all duration-300 transform hover:-translate-y-0.5";
@@ -22,7 +26,9 @@ const ActionButton: React.FC<ActionButtonProps> = ({
 
   return (
     <button
+      type={type}
       onClick={onClick}
+      disabled={disabled}
       className={`${baseStyles} ${variants[variant]}`}
     >
       {icon}
