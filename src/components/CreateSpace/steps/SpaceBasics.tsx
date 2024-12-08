@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
-import { Eye, EyeOff } from 'lucide-react';
-import { SpaceData } from '../CreateSpaceModal';
+import React, { useState } from "react";
+import { Eye, EyeOff } from "lucide-react";
+import { SpaceData } from "../../../types/types";
+// import { SpaceData } from "../CreateSpaceModal";
 
 interface SpaceBasicsProps {
   data: SpaceData;
@@ -8,7 +9,11 @@ interface SpaceBasicsProps {
   onNext: () => void;
 }
 
-const SpaceBasics: React.FC<SpaceBasicsProps> = ({ data, onUpdate, onNext }) => {
+const SpaceBasics: React.FC<SpaceBasicsProps> = ({
+  data,
+  onUpdate,
+  onNext,
+}) => {
   const [showPassword, setShowPassword] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -20,7 +25,10 @@ const SpaceBasics: React.FC<SpaceBasicsProps> = ({ data, onUpdate, onNext }) => 
     <form onSubmit={handleSubmit} className="space-y-6">
       {/* Space Name and Description fields remain unchanged */}
       <div>
-        <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
+        <label
+          htmlFor="name"
+          className="block text-sm font-medium text-gray-700 mb-1"
+        >
           Space Name
         </label>
         <input
@@ -33,9 +41,29 @@ const SpaceBasics: React.FC<SpaceBasicsProps> = ({ data, onUpdate, onNext }) => 
           required
         />
       </div>
+      <div>
+        <label
+          htmlFor="creatorNickname"
+          className="block text-sm font-medium text-gray-700 mb-1"
+        >
+          Creator Nickname
+        </label>
+        <input
+          type="text"
+          id="creatorName"
+          value={data.creatorNickname}
+          onChange={(e) => onUpdate({ creatorNickname: e.target.value })}
+          className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+          placeholder="Boncuky"
+          required
+        />
+      </div>
 
       <div>
-        <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-1">
+        <label
+          htmlFor="description"
+          className="block text-sm font-medium text-gray-700 mb-1"
+        >
           Description
         </label>
         <textarea
@@ -50,7 +78,10 @@ const SpaceBasics: React.FC<SpaceBasicsProps> = ({ data, onUpdate, onNext }) => 
       </div>
 
       <div>
-        <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
+        <label
+          htmlFor="password"
+          className="block text-sm font-medium text-gray-700 mb-1"
+        >
           Space Password
         </label>
         <div className="relative">
