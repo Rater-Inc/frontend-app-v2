@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
-import { Plus, X } from 'lucide-react';
-import { SpaceData } from '../CreateSpaceModal';
+import React, { useState } from "react";
+import { Plus, X } from "lucide-react";
+import { SpaceData } from "../../../types/types";
+// import { SpaceData } from "../CreateSpaceModal";
 
 interface MetricsSetupProps {
   data: SpaceData;
@@ -9,21 +10,30 @@ interface MetricsSetupProps {
   onBack: () => void;
 }
 
-const MetricsSetup: React.FC<MetricsSetupProps> = ({ data, onUpdate, onNext, onBack }) => {
-  const [newMetric, setNewMetric] = useState({ name: '', description: '', maxScore: 10 });
+const MetricsSetup: React.FC<MetricsSetupProps> = ({
+  data,
+  onUpdate,
+  onNext,
+  onBack,
+}) => {
+  const [newMetric, setNewMetric] = useState({
+    name: "",
+    description: "",
+    maxScore: 10,
+  });
 
   const addMetric = () => {
     if (newMetric.name && newMetric.description) {
       onUpdate({
-        metrics: [...data.metrics, { ...newMetric }]
+        metrics: [...data.metrics, { ...newMetric }],
       });
-      setNewMetric({ name: '', description: '', maxScore: 10 });
+      setNewMetric({ name: "", description: "", maxScore: 10 });
     }
   };
 
   const removeMetric = (index: number) => {
     onUpdate({
-      metrics: data.metrics.filter((_, i) => i !== index)
+      metrics: data.metrics.filter((_, i) => i !== index),
     });
   };
 
@@ -36,9 +46,8 @@ const MetricsSetup: React.FC<MetricsSetupProps> = ({ data, onUpdate, onNext, onB
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
-
       <div className="p-4 border-2 border-dashed border-gray-200 rounded-lg">
-        <div className="grid grid-cols-2 gap-4 mb-4">
+        <div className="grid grid-cols-1 gap-4 mb-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Metric Name
@@ -46,12 +55,14 @@ const MetricsSetup: React.FC<MetricsSetupProps> = ({ data, onUpdate, onNext, onB
             <input
               type="text"
               value={newMetric.name}
-              onChange={(e) => setNewMetric(prev => ({ ...prev, name: e.target.value }))}
+              onChange={(e) =>
+                setNewMetric((prev) => ({ ...prev, name: e.target.value }))
+              }
               className="w-full px-3 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-purple-500 focus:border-transparent"
               placeholder="e.g., Teamwork"
             />
           </div>
-          <div>
+          {/* <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Max Score
             </label>
@@ -63,7 +74,7 @@ const MetricsSetup: React.FC<MetricsSetupProps> = ({ data, onUpdate, onNext, onB
               max="100"
               className="w-full px-3 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-purple-500 focus:border-transparent"
             />
-          </div>
+          </div> */}
         </div>
         <div className="mb-4">
           <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -72,7 +83,9 @@ const MetricsSetup: React.FC<MetricsSetupProps> = ({ data, onUpdate, onNext, onB
           <input
             type="text"
             value={newMetric.description}
-            onChange={(e) => setNewMetric(prev => ({ ...prev, description: e.target.value }))}
+            onChange={(e) =>
+              setNewMetric((prev) => ({ ...prev, description: e.target.value }))
+            }
             className="w-full px-3 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-purple-500 focus:border-transparent"
             placeholder="What does this metric measure?"
           />
@@ -99,7 +112,10 @@ const MetricsSetup: React.FC<MetricsSetupProps> = ({ data, onUpdate, onNext, onB
             </button>
             <h4 className="font-medium text-gray-900">{metric.name}</h4>
             <p className="text-sm text-gray-600">{metric.description}</p>
-            <p className="text-sm text-gray-500 mt-1">Max score: {metric.maxScore}</p>
+            <p className="text-sm text-gray-500 mt-1">
+              {/* Max score: {metric.maxScore} */}
+              Max score : 5
+            </p>
           </div>
         ))}
       </div>
