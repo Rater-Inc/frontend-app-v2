@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Trophy, Medal, ArrowLeft, BarChart2 } from 'lucide-react';
 import { Bar } from 'react-chartjs-2';
 import {
@@ -33,6 +33,7 @@ const mockResults = {
 
 const OverallResultsPage = () => {
   const navigate = useNavigate();
+  const { spaceId } = useParams();
   const [selectedMetric, setSelectedMetric] = useState('all');
 
   const getMetricWinner = (metric: string) => {
@@ -79,7 +80,7 @@ const OverallResultsPage = () => {
     <div className="min-h-screen py-12 px-4">
       <div className="max-w-6xl mx-auto">
         <button
-          onClick={() => navigate('/rate')}
+          onClick={() => navigate(`/space/${spaceId}/rate`)}
           className="mb-8 flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors"
         >
           <ArrowLeft className="h-4 w-4" />
@@ -141,7 +142,7 @@ const OverallResultsPage = () => {
 
           <div className="text-center">
             <button
-              onClick={() => navigate('/results/individual')}
+              onClick={() => navigate(`/space/${spaceId}/results/individual`)} 
               className="px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg hover:shadow-lg transition-all duration-300"
             >
               View Individual Results

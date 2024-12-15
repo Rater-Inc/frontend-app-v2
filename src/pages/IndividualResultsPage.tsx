@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { ArrowLeft, User } from 'lucide-react';
 import { Radar } from 'react-chartjs-2';
 import {
@@ -33,6 +33,8 @@ const mockResults = {
 
 const IndividualResultsPage = () => {
   const navigate = useNavigate();
+  const { spaceId } = useParams();
+  
   const [selectedMember, setSelectedMember] = useState(mockResults.members[0]);
 
   const getChartData = (member: typeof selectedMember) => ({
@@ -75,7 +77,7 @@ const IndividualResultsPage = () => {
     <div className="min-h-screen py-12 px-4">
       <div className="max-w-6xl mx-auto">
         <button
-          onClick={() => navigate('/results/overall')}
+          onClick={() => navigate(`/space/${spaceId}/results/overall`)}
           className="mb-8 flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors"
         >
           <ArrowLeft className="h-4 w-4" />

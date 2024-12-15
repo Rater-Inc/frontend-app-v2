@@ -1,10 +1,10 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Star, BarChart2, ArrowLeft } from 'lucide-react';
 import ActionCard from '../components/ActionCard';
 
 const SelectionPage = () => {
   const navigate = useNavigate();
+  const { spaceId } = useParams();
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4">
@@ -25,14 +25,14 @@ const SelectionPage = () => {
             description="Rate your team members' performance across different metrics"
             icon={<Star className="h-6 w-6 text-white" />}
             gradient="from-purple-600 to-purple-800"
-            onClick={() => navigate('/rate')}
+            onClick={() => navigate(`/space/${spaceId}/rate`)}
           />
           <ActionCard
             title="View Results"
             description="Check overall and individual performance results"
             icon={<BarChart2 className="h-6 w-6 text-white" />}
             gradient="from-pink-600 to-pink-800"
-            onClick={() => navigate('/results/overall')}
+            onClick={() => navigate(`/space/${spaceId}/results/overall`)}
           />
         </div>
       </div>

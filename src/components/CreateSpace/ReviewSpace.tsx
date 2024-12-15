@@ -7,26 +7,26 @@ import { useNavigate } from 'react-router-dom';
 interface ReviewSpaceProps {
   data: SpaceData;
   onBack: () => void;
-  onSubmit: () => void;
+  onSubmit?: () => void;
 }
 
 const ReviewSpace: React.FC<ReviewSpaceProps> = ({ data, onBack, onSubmit }) => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
-  const [spaceUrl, setSpaceUrl] = useState<string | null>(null);
+  const [spaceId, setSpaceId] = useState<string | null>(null);
 
   const mockCreateSpace = async (spaceData: SpaceData): Promise<string> => {
     // Simulate API call
     await new Promise(resolve => setTimeout(resolve, 1500));
     // Return a mock space URL
-    return `https://rater.com/space/${Math.random().toString(36).substring(7)}`;
+    return Math.random().toString(36).substring(7);
   };
 
   const handleSubmit = async () => {
     setIsLoading(true);
     try {
       const url = await mockCreateSpace(data);
-      setSpaceUrl(url);
+      setSpaceId(url);
     } catch (error) {
       console.error('Failed to create space:', error);
       // Handle error appropriately
@@ -35,7 +35,7 @@ const ReviewSpace: React.FC<ReviewSpaceProps> = ({ data, onBack, onSubmit }) => 
     }
   };
 
-  if (spaceUrl) {
+  if (spaceId) {
     return (
       <div className="space-y-6">
         <div className="text-center space-y-4">
@@ -50,7 +50,7 @@ const ReviewSpace: React.FC<ReviewSpaceProps> = ({ data, onBack, onSubmit }) => 
               <input
                 type="text"
                 readOnly
-                value={spaceUrl}
+                value={`https://example.com/space/${spaceId}`}
                 className="flex-1 bg-transparent outline-none text-sm"
                 onClick={e => (e.target as HTMLInputElement).select()}
               />
@@ -60,14 +60,14 @@ const ReviewSpace: React.FC<ReviewSpaceProps> = ({ data, onBack, onSubmit }) => 
 
         <div className="flex justify-center gap-4">
           <button
-            onClick={() => navigate(`/rate`)}
+            onClick={() => navigate(`/space/${spaceId}/rate`)}
             className="px-6 py-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg hover:shadow-lg transition-all duration-300 flex items-center gap-2"
           >
             <Star className="h-4 w-4" />
             Start Rating
           </button>
           <button
-            onClick={() => navigate(`/results/overall`)}
+            onClick={() => navigate(`/space/${spaceId}/results/overall`)}
             className="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-all duration-300 flex items-center gap-2"
           >
             <ChevronRight className="h-4 w-4" />

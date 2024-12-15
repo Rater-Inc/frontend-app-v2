@@ -1,4 +1,3 @@
-import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Star, Users, ArrowRight } from 'lucide-react';
 import ActionButton from '../components/ActionButton';
@@ -35,7 +34,7 @@ const LandingPage = () => {
             </ActionButton>
 
             <ActionButton
-              onClick={() => navigate('/select-action')}
+              onClick={() => navigate('/enter-space')}
               icon={<ArrowRight className="h-5 w-5" />}
               variant="secondary"
             >

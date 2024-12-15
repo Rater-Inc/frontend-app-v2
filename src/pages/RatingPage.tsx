@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { X, Star, ChevronLeft, ChevronRight } from 'lucide-react';
 import RatingSlider from '../components/Rating/RatingStars';
 
@@ -18,6 +18,8 @@ const mockMetrics = [
 
 const RatingPage = () => {
   const navigate = useNavigate();
+  const { spaceId } = useParams();
+  
   const [currentMemberIndex, setCurrentMemberIndex] = useState(0);
   const [ratings, setRatings] = useState<Record<string, number>>({});
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -59,13 +61,13 @@ const RatingPage = () => {
           <p className="text-gray-600 mb-8">Thank you for rating your team members.</p>
           <div className="flex flex-col gap-4">
             <button
-              onClick={() => navigate('/results/overall')}
+              onClick={() => navigate(`/space/${spaceId}/results/overall`)}
               className="px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg hover:shadow-lg transition-all duration-300"
             >
               View Overall Results
             </button>
             <button
-              onClick={() => navigate('/results/individual')}
+              onClick={() => navigate(`/space/${spaceId}/results/individual`)}
               className="px-6 py-3 border-2 border-purple-200 text-purple-600 rounded-lg hover:bg-purple-50 transition-all duration-300"
             >
               View Individual Results
