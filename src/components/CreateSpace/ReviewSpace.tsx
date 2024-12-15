@@ -21,22 +21,12 @@ const ReviewSpace: React.FC<ReviewSpaceProps> = ({
   const [isLoading, setIsLoading] = useState(false);
   const [spaceUrl, setSpaceUrl] = useState<string | null>(null);
 
-  // const mockCreateSpace = async (spaceData: SpaceData): Promise<string> => {
-  //   // Simulate API call
-  //   await new Promise((resolve) => setTimeout(resolve, 1500));
-  //   // Return a mock space URL
-  //   return `https://rater.com/space/${Math.random().toString(36).substring(7)}`;
-  // };
-
   const handleSubmit = async () => {
     setIsLoading(true);
     try {
       const response = await createSpace(data);
       console.log("response " + response);
       setSpaceUrl(response.link);
-      return `https://rater.com/space/${Math.random()
-        .toString(36)
-        .substring(7)}`;
     } catch (error) {
       console.error("Failed to create space:", error);
       // Handle error appropriately
