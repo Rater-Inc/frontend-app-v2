@@ -36,7 +36,7 @@ const CreateSpacePage = () => {
       case 2:
         return <MembersSetup data={spaceData} onUpdate={updateSpaceData} onNext={handleNext} onBack={handleBack} />;
       case 3:
-        return <ReviewSpace data={spaceData} onBack={handleBack} onSubmit={() => navigate('/')} />;
+        return <ReviewSpace data={spaceData} onBack={handleBack} />;
       default:
         return null;
     }
