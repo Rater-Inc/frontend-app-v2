@@ -1,45 +1,42 @@
 import React, { useState } from "react";
 import { Plus, X } from "lucide-react";
 import { SpaceData } from "../../../types/types";
-// import { SpaceData } from "../CreateSpaceModal";
 
-interface MetricsSetupProps {
+interface ParticipantsSetupProps {
     data: SpaceData;
     onUpdate: (data: Partial<SpaceData>) => void;
     onNext: () => void;
     onBack: () => void;
 }
 
-const MetricsSetup: React.FC<MetricsSetupProps> = ({
+const ParticipantsSetup: React.FC<ParticipantsSetupProps> = ({
     data,
     onUpdate,
     onNext,
     onBack,
 }) => {
-    const [newMetric, setNewMetric] = useState({
-        name: "",
-        description: "",
-        maxScore: 10,
+    const [newParticipant, setNewParticipant] = useState({
+        participantName: "",
     });
 
-    const addMetric = () => {
-        if (newMetric.name && newMetric.description) {
+    const addParticipant = () => {
+        if (newParticipant.participantName) {
             onUpdate({
-                metrics: [...data.metrics, { ...newMetric }],
+                participants: [...data.participants, { ...newParticipant }],
             });
-            setNewMetric({ name: "", description: "", maxScore: 10 });
+            setNewParticipant({ participantName: "" });
         }
     };
 
-    const removeMetric = (index: number) => {
+    const removeParticipant = (index: number) => {
         onUpdate({
-            metrics: data.metrics.filter((_, i) => i !== index),
+            participants: data.participants.filter((_, i) => i !== index),
         });
     };
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        if (data.metrics.length > 0) {
+        if (data.participants.length > 0) {
             onNext();
         }
     };
@@ -50,85 +47,61 @@ const MetricsSetup: React.FC<MetricsSetupProps> = ({
                 <div className="grid grid-cols-1 gap-4 mb-4">
                     <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">
-                            Metric Name
+                            Participant Name
                         </label>
                         <input
                             type="text"
-                            value={newMetric.name}
+                            value={newParticipant.participantName}
                             onChange={(e) =>
-                                setNewMetric((prev) => ({
+                                setNewParticipant((prev) => ({
                                     ...prev,
-                                    name: e.target.value,
+                                    participantName: e.target.value,
                                 }))
                             }
                             className="w-full px-3 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                            placeholder="e.g., Teamwork"
+                            placeholder="Full name"
                         />
                     </div>
                     {/* <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Max Score
+              Email Address
             </label>
             <input
-              type="number"
-              value={newMetric.maxScore}
-              onChange={(e) => setNewMetric(prev => ({ ...prev, maxScore: parseInt(e.target.value) }))}
-              min="1"
-              max="100"
+              type="email"
+              value={newParticipant.email}
+              onChange={(e) => setNewParticipant(prev => ({ ...prev, email: e.target.value }))}
               className="w-full px-3 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+              placeholder="email@example.com"
             />
           </div> */}
                 </div>
-                <div className="mb-4">
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Description
-                    </label>
-                    <input
-                        type="text"
-                        value={newMetric.description}
-                        onChange={(e) =>
-                            setNewMetric((prev) => ({
-                                ...prev,
-                                description: e.target.value,
-                            }))
-                        }
-                        className="w-full px-3 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                        placeholder="What does this metric measure?"
-                    />
-                </div>
                 <button
                     type="button"
-                    onClick={addMetric}
+                    onClick={addParticipant}
                     className="w-full py-2 flex items-center justify-center gap-2 text-purple-600 hover:bg-purple-50 rounded-lg transition-colors"
                 >
                     <Plus className="h-4 w-4" />
-                    Add Metric
+                    Add Participant
                 </button>
             </div>
 
             <div className="space-y-4">
-                {data.metrics.map((metric, index) => (
+                {data.participants.map((participants, index) => (
                     <div
                         key={index}
                         className="p-4 bg-gray-50 rounded-lg relative group"
                     >
                         <button
                             type="button"
-                            onClick={() => removeMetric(index)}
+                            onClick={() => removeParticipant(index)}
                             className="absolute right-2 top-2 p-1 bg-white rounded-full shadow opacity-0 group-hover:opacity-100 transition-opacity"
                         >
                             <X className="h-4 w-4 text-gray-500" />
                         </button>
                         <h4 className="font-medium text-gray-900">
-                            {metric.name}
+                            {participants.participantName}
                         </h4>
-                        <p className="text-sm text-gray-600">
-                            {metric.description}
-                        </p>
-                        <p className="text-sm text-gray-500 mt-1">
-                            {/* Max score: {metric.maxScore} */}
-                            Max score : 5
-                        </p>
+                        {/* <p className="text-sm text-gray-600">{Participant.email}</p> */}
                     </div>
                 ))}
             </div>
@@ -143,7 +116,7 @@ const MetricsSetup: React.FC<MetricsSetupProps> = ({
                 </button>
                 <button
                     type="submit"
-                    disabled={data.metrics.length === 0}
+                    disabled={data.participants.length === 0}
                     className="px-6 py-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg hover:shadow-lg transition-all duration-300 disabled:opacity-50"
                 >
                     Next Step
@@ -153,4 +126,4 @@ const MetricsSetup: React.FC<MetricsSetupProps> = ({
     );
 };
 
-export default MetricsSetup;
+export default ParticipantsSetup;
