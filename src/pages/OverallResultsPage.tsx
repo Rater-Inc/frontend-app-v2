@@ -9,8 +9,8 @@ import {
   BarElement,
   Title,
   Tooltip,
-  Legend
-} from 'chart.js';
+  Legend,
+} from "chart.js";
 
 ChartJS.register(
   CategoryScale,
@@ -24,11 +24,23 @@ ChartJS.register(
 // Mock data
 const mockResults = {
   members: [
-    { id: 1, name: 'Alex Johnson', scores: { teamwork: 9, communication: 8, leadership: 7 } },
-    { id: 2, name: 'Sarah Williams', scores: { teamwork: 8, communication: 9, leadership: 9 } },
-    { id: 3, name: 'Mike Chen', scores: { teamwork: 7, communication: 7, leadership: 8 } },
+    {
+      id: 1,
+      name: "Alex Johnson",
+      scores: { teamwork: 9, communication: 8, leadership: 7 },
+    },
+    {
+      id: 2,
+      name: "Sarah Williams",
+      scores: { teamwork: 8, communication: 9, leadership: 9 },
+    },
+    {
+      id: 3,
+      name: "Mike Chen",
+      scores: { teamwork: 7, communication: 7, leadership: 8 },
+    },
   ],
-  metrics: ['Teamwork', 'Communication', 'Leadership'],
+  metrics: ["Teamwork", "Communication", "Leadership"],
 };
 
 const OverallResultsPage = () => {
@@ -38,21 +50,25 @@ const OverallResultsPage = () => {
 
   const getMetricWinner = (metric: string) => {
     return mockResults.members.reduce((prev, current) => {
-      const prevScore = prev.scores[metric.toLowerCase() as keyof typeof prev.scores];
-      const currentScore = current.scores[metric.toLowerCase() as keyof typeof current.scores];
+      const prevScore =
+        prev.scores[metric.toLowerCase() as keyof typeof prev.scores];
+      const currentScore =
+        current.scores[metric.toLowerCase() as keyof typeof current.scores];
       return prevScore > currentScore ? prev : current;
     });
   };
 
   const chartData = {
-    labels: mockResults.members.map(m => m.name),
+    labels: mockResults.members.map((m) => m.name),
     datasets: mockResults.metrics.map((metric, index) => ({
       label: metric,
-      data: mockResults.members.map(m => m.scores[metric.toLowerCase() as keyof typeof m.scores]),
+      data: mockResults.members.map(
+        (m) => m.scores[metric.toLowerCase() as keyof typeof m.scores]
+      ),
       backgroundColor: [
-        'rgba(147, 51, 234, 0.7)',
-        'rgba(236, 72, 153, 0.7)',
-        'rgba(59, 130, 246, 0.7)',
+        "rgba(147, 51, 234, 0.7)",
+        "rgba(236, 72, 153, 0.7)",
+        "rgba(59, 130, 246, 0.7)",
       ][index],
     })),
   };
@@ -61,11 +77,11 @@ const OverallResultsPage = () => {
     responsive: true,
     plugins: {
       legend: {
-        position: 'top' as const,
+        position: "top" as const,
       },
       title: {
         display: true,
-        text: 'Performance Comparison',
+        text: "Performance Comparison",
       },
     },
     scales: {
@@ -108,7 +124,15 @@ const OverallResultsPage = () => {
                   <div className="flex items-center gap-4">
                     <div className="flex-1">
                       <p className="font-medium text-gray-900">{winner.name}</p>
-                      <p className="text-sm text-gray-500">Score: {winner.scores[metric.toLowerCase() as keyof typeof winner.scores]}/10</p>
+                      <p className="text-sm text-gray-500">
+                        Score:{" "}
+                        {
+                          winner.scores[
+                            metric.toLowerCase() as keyof typeof winner.scores
+                          ]
+                        }
+                        /10
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -135,7 +159,7 @@ const OverallResultsPage = () => {
                 ))}
               </select>
             </div>
-            <div className="h-[400px]">
+            <div className="h-[400px] flex justify-center">
               <Bar options={chartOptions} data={chartData} />
             </div>
           </div>
