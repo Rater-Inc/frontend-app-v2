@@ -1,26 +1,39 @@
-import React, { useState } from 'react';
-import { useNavigate, useParams, useLocation } from 'react-router-dom';
-import { KeyRound, ArrowLeft } from 'lucide-react';
-import { spaceAuth } from '../services/auth';
-import {api} from '../services/api';
+import React, { useState, useEffect } from "react";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
+import { KeyRound, ArrowLeft } from "lucide-react";
+import { spaceAuth } from "../services/auth";
+import { authSpace } from "../services/api";
 
 const JoinSpacePage = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { spaceId } = useParams();
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
 
+  useEffect(() => {
+    const safeSpaceId = spaceId || "default-space-id";
+    const storageToken = spaceAuth.getToken(safeSpaceId);
+    if (storageToken) {
+      // TODO (API) Auth By Token
+      navigate(`/space/${spaceId}/select-action`);
+    }
+  });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const { token } = await spaceAuth.verifyPassword(spaceId!, password);
-      spaceAuth.setToken(spaceId!, token);
-      const returnUrl = location.state?.returnUrl || `/space/${spaceId}/select-action`;
-      navigate(returnUrl);
+      const response = await authSpace(spaceId, password);
+      if (response?.data?.success == true) {
+        spaceAuth.setToken(spaceId!, response.data.jwtToken);
+        const returnUrl =
+          location.state?.returnUrl || `/space/${spaceId}/select-action`;
+        navigate(returnUrl);
+      } else {
+        setError("Invalid Password");
+      }
     } catch (err) {
-      setError('Invalid password');
+      setError("Invalid Password");
     }
   };
 
@@ -28,7 +41,7 @@ const JoinSpacePage = () => {
     <div className="min-h-screen flex items-center justify-center p-4">
       <div className="bg-white rounded-2xl w-full max-w-md shadow-xl p-8">
         <button
-          onClick={() => navigate('/')}
+          onClick={() => navigate("/")}
           className="mb-6 flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors"
         >
           <ArrowLeft className="h-4 w-4" />
@@ -40,7 +53,9 @@ const JoinSpacePage = () => {
             <KeyRound className="w-8 h-8 text-white" />
           </div>
           <h1 className="text-2xl font-bold text-gray-900">Join Space</h1>
-          <p className="text-gray-600 mt-2">Enter the space password to continue</p>
+          <p className="text-gray-600 mt-2">
+            Enter the space password to continue
+          </p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
