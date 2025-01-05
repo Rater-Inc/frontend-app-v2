@@ -89,7 +89,9 @@ const RatingPage = () => {
   //   metric => ratings[`${currentParticipant.participantId}-${metric.metricId}`] !== undefined
   // );
 
-  const hasAllRatings = metrics.length * participants.length === ratings.length && ratings.every(r => r !== undefined);
+  const hasAllRatings = metrics.every(metric => 
+    ratings.some(rating => rating.metricId === metric.metricId && rating.rateeId === currentParticipant?.participantId)
+  );
 
   if (isSubmitted) {
     return (
