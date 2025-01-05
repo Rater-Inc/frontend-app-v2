@@ -8,7 +8,9 @@ assignees: ''
 ---
 
 <!-- GPT Model Prompt
-I will provide an issue title and template, and you will create a clear, detailed issue description that follows the template structure. The description will be concise while including all necessary information to understand and address the issue. Format the response according to the provided template fields.
+I will provide an issue title, small description and template, and you will create a clear, detailed issue description that follows the template structure. The description will be concise while including all necessary information to understand and address the issue. Format the response according to the provided template fields.
+
+Give the responses always as markdown.
 -->
 
 
