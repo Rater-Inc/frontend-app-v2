@@ -50,7 +50,7 @@ export const api = {
         try {
             apiClient.defaults.headers["Authorization"] = `Bearer ${token}`;
             const response = await apiClient.post(`api/space/get-space?link=${spaceLink}`);
-            return response.data;
+            return response;
         }
         catch (error) {
             console.error("Error getting space:", error);
