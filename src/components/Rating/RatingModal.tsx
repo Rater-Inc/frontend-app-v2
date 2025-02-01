@@ -36,7 +36,6 @@ const RatingModal: React.FC<RatingModalProps> = ({ onClose }) => {
     if (currentMemberIndex < mockMembers.length - 1) {
       setCurrentMemberIndex(prev => prev + 1);
     } else {
-      console.log('Submit ratings:', ratings);
       onClose();
     }
   };

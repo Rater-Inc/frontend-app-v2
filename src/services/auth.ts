@@ -20,9 +20,7 @@ export const spaceAuth = {
 
   verifyPassword: async (spaceId: string, password: string) => {
     var res = await api.authenticateLink(spaceId, password);
-    console.log(res);
     if(res.success == true){
-      console.log(res.jwtToken);
       spaceAuth.setToken(spaceId, res.jwtToken);
       return {token: res.jwtToken};
     }

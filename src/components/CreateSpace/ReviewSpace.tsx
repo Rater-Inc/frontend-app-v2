@@ -24,7 +24,6 @@ const ReviewSpace: React.FC<ReviewSpaceProps> = ({
     setIsLoading(true);
     try {
       const response = await createSpace(data);
-      console.log("response " + response);
       setSpaceUrl(response.link);
     } catch (error) {
       console.error("Failed to create space:", error);
