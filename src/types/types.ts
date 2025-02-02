@@ -18,3 +18,26 @@ export type AuthState = {
     isLoading: boolean;
     error: string | null;
 };
+
+export type Metric = {
+    metricId: number;
+    name: string;
+    description: string;
+}
+
+export type Participant = {
+    participantId: number;
+    participantName: string;
+}
+
+export type RatingDetails = {
+    rateeId: number,
+    metricId: number,
+    score: number
+}
+
+export type Rating = {
+    raterNickName: string,
+    spaceId: number,
+    ratingDetails: RatingDetails[]
+}

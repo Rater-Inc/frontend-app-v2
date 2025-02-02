@@ -1,3 +1,5 @@
+import { api } from "./api";
+
 export const spaceAuth = {
   setToken: (spaceId: string, token: string) => {
     const auth = JSON.parse(localStorage.getItem('space-auth') || '{}');
@@ -17,11 +19,13 @@ export const spaceAuth = {
   },
 
   verifyPassword: async (spaceId: string, password: string) => {
-    await new Promise(resolve => setTimeout(resolve, 500));
-    if (password === "test123") {
-      const mockToken = `mock-token-${spaceId}-${Date.now()}`;
-      return { token: mockToken };
+    var res = await api.authenticateLink(spaceId, password);
+    if(res.success == true){
+      spaceAuth.setToken(spaceId, res.jwtToken);
+      return {token: res.jwtToken};
     }
-    throw new Error('Invalid password');
+    else {
+      throw new Error('Invalid password');
+    }
   }
 };

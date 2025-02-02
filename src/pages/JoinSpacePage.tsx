@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
-import { KeyRound, ArrowLeft } from 'lucide-react';
+import { KeyRound, ArrowLeft ,Check} from 'lucide-react';
 import { spaceAuth } from '../services/auth';
 import {api} from '../services/api';
 
@@ -10,9 +10,11 @@ const JoinSpacePage = () => {
   const { spaceId } = useParams();
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
 
   const handleSubmit = async (e: React.FormEvent) => {
+    setIsLoading(true);
     e.preventDefault();
     try {
       const { token } = await spaceAuth.verifyPassword(spaceId!, password);
@@ -20,6 +22,7 @@ const JoinSpacePage = () => {
       const returnUrl = location.state?.returnUrl || `/space/${spaceId}/select-action`;
       navigate(returnUrl);
     } catch (err) {
+      setIsLoading(false);
       setError('Invalid password');
     }
   };
@@ -55,12 +58,22 @@ const JoinSpacePage = () => {
             {error && <p className="mt-2 text-sm text-red-600">{error}</p>}
           </div>
 
-          <button
-            type="submit"
-            className="w-full py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg hover:shadow-lg transition-all duration-300"
-          >
-            Join Space
-          </button>
+              <button
+              type="submit"
+              disabled={isLoading}
+              className="w-full py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg hover:shadow-lg transition-all duration-300"
+              >
+              <div className="flex items-center justify-center h-6">
+                {isLoading ? (
+                <div className="h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                ) : (
+                <>
+                  <Check className="h-4 w-4 mr-2" />
+                  Join Space
+                </>
+                )}
+              </div>
+              </button>
         </form>
       </div>
     </div>
