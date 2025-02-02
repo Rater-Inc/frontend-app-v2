@@ -53,7 +53,7 @@ const ReviewSpace: React.FC<ReviewSpaceProps> = ({
               <input
                 type="text"
                 readOnly
-                value={`https://example.com/space/${spaceUrl}`} // TODO: Replace with actual URL
+                value={`https://rater.me/space/${spaceUrl}`} // TODO: Replace with actual URL
                 className="flex-1 bg-transparent outline-none text-sm"
                 onClick={(e) => (e.target as HTMLInputElement).select()}
               />
