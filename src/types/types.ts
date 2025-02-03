@@ -7,6 +7,18 @@ export type SpaceData = {
     creatorNickname: string;
 };
 
+export type SpacexData = {
+    spaceId: number;
+    creatorId: number;
+    name: string;
+    description: string;
+    isLocked: boolean;
+    link:string;
+    createdAt:Date;
+    metrics: Metric[];
+    participants: Participant[];
+}
+
 export type AuthenticatedSpace = {
     spaceId: string;
     authenticatedAt: number;
@@ -41,3 +53,53 @@ export type Rating = {
     spaceId: number,
     ratingDetails: RatingDetails[]
 }
+
+type MetricResult = {
+    metricId: number;
+    name: string;
+    averageMetricScore: number;
+  };
+  
+  type ParticipantResult = {
+    participantId: number;
+    participantName: string;
+    averageScore: number;
+    metricResults: MetricResult[];
+  };
+  
+  type LeaderParticipant = {
+    participantId: number;
+    participantName: string;
+  };
+  
+  type MetricLeader = {
+    id: number;
+    name: string;
+    score: number;
+    leaderParticipant: LeaderParticipant;
+  };
+  
+export type SpaceResultData = {
+    spaceId: number;
+    name: string;
+    participantResults: ParticipantResult[];
+    metricLeaders: MetricLeader[];
+  };
+
+  export type RatingData = {
+    success: boolean;
+    spaceId: number;
+    ratingCount: number;
+  }
+
+  export type SpaceInfo = {
+    spaceData:SpacexData;
+    RatingData:RatingData;
+    timestamp:number;
+  }
+  
+  export type SpaceInfoCollection = {
+    [key: string]: SpaceInfo;
+  };
+  
+  
