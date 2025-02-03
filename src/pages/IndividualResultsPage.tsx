@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useNavigate, useParams , useLocation } from 'react-router-dom';
 import { ArrowLeft, User } from 'lucide-react';
 import { Radar } from 'react-chartjs-2';
 import {
@@ -11,6 +11,9 @@ import {
   Tooltip,
   Legend
 } from 'chart.js';
+import { space } from '../services/space';
+import { spaceAuth } from '../services/auth';
+import { SpaceResultData } from '../types/types';
 
 ChartJS.register(
   RadialLinearScale,
@@ -21,30 +24,39 @@ ChartJS.register(
   Legend
 );
 
-// Mock data
-const mockResults = {
-  members: [
-    { id: 1, name: 'Alex Johnson', scores: { teamwork: 9, communication: 8, leadership: 7 } },
-    { id: 2, name: 'Sarah Williams', scores: { teamwork: 8, communication: 9, leadership: 9 } },
-    { id: 3, name: 'Mike Chen', scores: { teamwork: 7, communication: 7, leadership: 8 } },
-  ],
-  metrics: ['Teamwork', 'Communication', 'Leadership'],
-};
-
 const IndividualResultsPage = () => {
   const navigate = useNavigate();
   const { spaceId } = useParams();
+  const location = useLocation();
+  const spaceResult = location.state?.spaceResult;
   
-  const [selectedMember, setSelectedMember] = useState(mockResults.members[0]);
+  const [spaceResultData, setSpaceResultData] = useState<SpaceResultData>();
+  const [selectedMember, setSelectedMember] = useState(spaceResultData?.participantResults[0]);
 
+  useEffect(() => {
+    const fetchSpaceResult = async () => {
+      if (spaceId === undefined) return;
+      const spaceResult = await space.getSpaceResult(spaceId,spaceAuth.getToken(spaceId));
+      if (!spaceResult) return;
+      setSpaceResultData(spaceResult);
+    }
+    
+    if (!spaceResult) {
+      fetchSpaceResult();
+    }
+    else {
+      setSpaceResultData(spaceResult);
+    }
+    setSelectedMember(spaceResultData?.participantResults[0]);
+  }, [spaceResultData,spaceId]);
+
+  
   const getChartData = (member: typeof selectedMember) => ({
-    labels: mockResults.metrics,
+    labels: member?.metricResults.map(metric => metric.name),
     datasets: [
       {
-        label: member.name,
-        data: mockResults.metrics.map(
-          metric => member.scores[metric.toLowerCase() as keyof typeof member.scores]
-        ),
+        label: member?.participantName,
+        data: member?.metricResults.map(metric => metric.averageMetricScore),
         backgroundColor: 'rgba(147, 51, 234, 0.2)',
         borderColor: 'rgba(147, 51, 234, 1)',
         borderWidth: 2,
@@ -63,7 +75,7 @@ const IndividualResultsPage = () => {
           display: true,
         },
         suggestedMin: 0,
-        suggestedMax: 10,
+        suggestedMax: 5,
       },
     },
     plugins: {
@@ -77,7 +89,7 @@ const IndividualResultsPage = () => {
     <div className="min-h-screen py-12 px-4">
       <div className="max-w-6xl mx-auto">
         <button
-          onClick={() => navigate(`/space/${spaceId}/results/overall`)}
+          onClick={() => navigate(`/space/${spaceId}/results/overall`, { state: { spaceResultData } })}
           className="mb-8 flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors"
         >
           <ArrowLeft className="h-4 w-4" />
@@ -94,23 +106,23 @@ const IndividualResultsPage = () => {
             <div className="md:w-1/3">
               <h3 className="text-lg font-semibold text-gray-900 mb-4">Select Member</h3>
               <div className="space-y-4">
-                {mockResults.members.map((member) => (
+                {spaceResultData?.participantResults.map((member) => (
                   <button
-                    key={member.id}
+                    key={member.participantId}
                     onClick={() => setSelectedMember(member)}
                     className={`w-full p-4 rounded-xl text-left transition-all ${
-                      selectedMember.id === member.id
+                      selectedMember?.participantId === member.participantId
                         ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-lg'
                         : 'bg-gray-50 hover:bg-gray-100 text-gray-900'
                     }`}
                   >
-                    <p className="font-medium">{member.name}</p>
+                    <p className="font-medium">{member.participantName}</p>
                     <p className={`text-sm ${
-                      selectedMember.id === member.id ? 'text-white/80' : 'text-gray-500'
+                      selectedMember?.participantId === member.participantId ? 'text-white/80' : 'text-gray-500'
                     }`}>
                       Average Score: {
-                        (Object.values(member.scores).reduce((a, b) => a + b, 0) / mockResults.metrics.length).toFixed(1)
-                      }/10
+                        member.averageScore.toFixed(1)
+                      }/5
                     </p>
                   </button>
                 ))}
@@ -126,11 +138,11 @@ const IndividualResultsPage = () => {
               </div>
 
               <div className="mt-6 grid grid-cols-3 gap-4">
-                {mockResults.metrics.map((metric) => (
-                  <div key={metric} className="bg-gray-50 p-4 rounded-xl">
-                    <h4 className="text-sm font-medium text-gray-900">{metric}</h4>
+                {spaceResultData?.metricLeaders.map((metric) => (
+                  <div key={metric.id} className="bg-gray-50 p-4 rounded-xl">
+                    <h4 className="text-sm font-medium text-gray-900">{metric.name}</h4>
                     <p className="text-2xl font-bold text-purple-600">
-                      {selectedMember.scores[metric.toLowerCase() as keyof typeof selectedMember.scores]}/10
+                      {selectedMember?.averageScore.toFixed(1)}/5
                     </p>
                   </div>
                 ))}

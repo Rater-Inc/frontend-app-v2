@@ -1,7 +1,8 @@
-import { useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useState , useEffect } from 'react';
+import { useNavigate, useParams, useLocation} from 'react-router-dom';
 import { Trophy, Medal, ArrowLeft, BarChart2 } from 'lucide-react';
 import { Bar } from 'react-chartjs-2';
+import { space } from '../services/space';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -11,6 +12,8 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
+import { spaceAuth } from '../services/auth';
+import { SpaceResultData } from '../types/types';
 
 ChartJS.register(
   CategoryScale,
@@ -21,56 +24,45 @@ ChartJS.register(
   Legend
 );
 
-// Mock data
-const mockResults = {
-  members: [
-    {
-      id: 1,
-      name: "Alex Johnson",
-      scores: { teamwork: 9, communication: 8, leadership: 7 },
-    },
-    {
-      id: 2,
-      name: "Sarah Williams",
-      scores: { teamwork: 8, communication: 9, leadership: 9 },
-    },
-    {
-      id: 3,
-      name: "Mike Chen",
-      scores: { teamwork: 7, communication: 7, leadership: 8 },
-    },
-  ],
-  metrics: ["Teamwork", "Communication", "Leadership"],
-};
-
 const OverallResultsPage = () => {
   const navigate = useNavigate();
   const { spaceId } = useParams();
+  const location = useLocation();
+  const result = location.state?.spaceResultData;
+
+  const [spaceResult, setSpaceResult] = useState<SpaceResultData>();
   const [selectedMetric, setSelectedMetric] = useState('all');
 
-  const getMetricWinner = (metric: string) => {
-    return mockResults.members.reduce((prev, current) => {
-      const prevScore =
-        prev.scores[metric.toLowerCase() as keyof typeof prev.scores];
-      const currentScore =
-        current.scores[metric.toLowerCase() as keyof typeof current.scores];
-      return prevScore > currentScore ? prev : current;
-    });
-  };
+  useEffect(() => {
+    const fetchSpaceResult = async () => {
+      if(spaceId === undefined) return;
+      const spaceResult = await space.getSpaceResult(spaceId,spaceAuth.getToken(spaceId));
+      setSpaceResult(spaceResult);
+    };
+    
+    if(result) {
+      setSpaceResult(result);
+    }
+    else {
+      fetchSpaceResult();
+    }
+
+  }, [result,spaceId]);
 
   const chartData = {
-    labels: mockResults.members.map((m) => m.name),
-    datasets: mockResults.metrics.map((metric, index) => ({
-      label: metric,
-      data: mockResults.members.map(
-        (m) => m.scores[metric.toLowerCase() as keyof typeof m.scores]
-      ),
+    labels: spaceResult?.participantResults.map((p) => p.participantName) || [],
+    datasets: spaceResult?.metricLeaders.map((metric, index) => ({
+      label: metric.name,
+      data: spaceResult.participantResults.map((p) => {
+        const metricResult = p.metricResults.find((m) => m.metricId === metric.id);
+        return metricResult ? metricResult.averageMetricScore : 0;
+      }),
       backgroundColor: [
         "rgba(147, 51, 234, 0.7)",
         "rgba(236, 72, 153, 0.7)",
         "rgba(59, 130, 246, 0.7)",
-      ][index],
-    })),
+      ][index % 3],
+    })) || [],
   };
 
   const chartOptions = {
@@ -87,7 +79,7 @@ const OverallResultsPage = () => {
     scales: {
       y: {
         beginAtZero: true,
-        max: 10,
+        max: 5,
       },
     },
   };
@@ -110,28 +102,26 @@ const OverallResultsPage = () => {
           </h1>
 
           <div className="grid md:grid-cols-3 gap-6 mb-12">
-            {mockResults.metrics.map((metric) => {
-              const winner = getMetricWinner(metric);
+            {spaceResult?.metricLeaders.map((metric) => {
               return (
                 <div
-                  key={metric}
+                  key={metric.id}
                   className="bg-gradient-to-br from-purple-50 to-pink-50 p-6 rounded-xl"
                 >
                   <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
                     <Medal className="h-5 w-5 text-yellow-500" />
-                    {metric} Champion
+                    {metric.name} Champion
                   </h3>
                   <div className="flex items-center gap-4">
                     <div className="flex-1">
-                      <p className="font-medium text-gray-900">{winner.name}</p>
+                      <p className="font-medium text-gray-900">{metric.leaderParticipant.participantName}</p>
                       <p className="text-sm text-gray-500">
                         Score:{" "}
                         {
-                          winner.scores[
-                            metric.toLowerCase() as keyof typeof winner.scores
-                          ]
+                          metric.score.toFixed(1)
+                          
                         }
-                        /10
+                        /5
                       </p>
                     </div>
                   </div>
@@ -152,9 +142,9 @@ const OverallResultsPage = () => {
                 className="px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
               >
                 <option value="all">All Metrics</option>
-                {mockResults.metrics.map((metric) => (
-                  <option key={metric} value={metric.toLowerCase()}>
-                    {metric}
+                {spaceResult?.metricLeaders.map((metric) => (
+                  <option key={metric.id} value={metric.name.toLowerCase()}>
+                    {metric.name}
                   </option>
                 ))}
               </select>
@@ -166,7 +156,7 @@ const OverallResultsPage = () => {
 
           <div className="text-center">
             <button
-              onClick={() => navigate(`/space/${spaceId}/results/individual`)} 
+              onClick={() => navigate(`/space/${spaceId}/results/individual`, { state: { spaceResult } })} 
               className="px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg hover:shadow-lg transition-all duration-300"
             >
               View Individual Results
