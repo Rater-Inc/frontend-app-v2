@@ -2,10 +2,10 @@ import { useEffect,useState  } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { X, Star, ChevronLeft, ChevronRight } from 'lucide-react';
 import RatingSlider from '../components/Rating/RatingStars';
-import { api , submitRatings } from '../services/api';
 import { Metric , Participant, RatingDetails , Rating} from '../types/types';
 import { spaceAuth } from '../services/auth';
 import { space } from '../services/space';
+import { storage } from '../services/storage';
 
 const RatingPage = () => {
   const navigate = useNavigate();
@@ -23,6 +23,12 @@ const RatingPage = () => {
   useEffect(() => {
     const fetchData = async () => {
       if (!spaceId) return;
+
+      // TODO : Belki Protected Route Tarzı bişey yapılabilir
+      const spaceInfoCollection = storage.getSpaceInfo();
+      if (spaceInfoCollection[spaceId]?.RatingData) {
+        navigate(`/space/${spaceId}/results/overall`);
+      }
 
       const spaceData = await space.getSpace(
         spaceId,
@@ -78,7 +84,7 @@ const RatingPage = () => {
       };
 
       if (!spaceId) return;
-      const response = await submitRatings(rating, spaceAuth.getToken(spaceId));
+      const response = await space.submitRating(rating, spaceAuth.getToken(spaceId), spaceId);
       if (response) {
         setIsSubmitted(true);
       }
