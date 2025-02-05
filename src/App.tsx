@@ -8,6 +8,7 @@ import OverallResultsPage from "./pages/OverallResultsPage";
 import IndividualResultsPage from "./pages/IndividualResultsPage";
 import JoinSpacePage from "./pages/JoinSpacePage";
 import EnterSpaceIdPage from "./pages/EnterSpaceIdPage";
+import NotFoundPage from "./pages/NotFoundPage";
 
 import { ProtectedRoute } from "./components/ProtectedRoute";
 
@@ -74,6 +75,7 @@ function App() {
                                 </ProtectedRoute>
                             }
                         />
+                        <Route path="*" element={<NotFoundPage />} />
                     </Routes>
                 </BrowserRouter>
             </div>
