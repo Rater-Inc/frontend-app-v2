@@ -7,7 +7,7 @@ export type SpaceData = {
     creatorNickname: string;
 };
 
-export type SpacexData = {
+export type PersistedSpaceData = {
     spaceId: number;
     creatorId: number;
     name: string;
@@ -60,7 +60,7 @@ type MetricResult = {
     averageMetricScore: number;
   };
   
-  type ParticipantResult = {
+  export type ParticipantResult = {
     participantId: number;
     participantName: string;
     averageScore: number;
@@ -93,7 +93,7 @@ export type SpaceResultData = {
   }
 
   export type SpaceInfo = {
-    spaceData:SpacexData;
+    spaceData:PersistedSpaceData;
     RatingData:RatingData;
     timestamp:number;
   }
