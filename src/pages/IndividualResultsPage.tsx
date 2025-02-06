@@ -28,27 +28,34 @@ const IndividualResultsPage = () => {
   const navigate = useNavigate();
   const { spaceId } = useParams();
   const location = useLocation();
-  const spaceResult = location.state?.spaceResult;
+  const result = location.state?.spaceResult;
   
   const [spaceResultData, setSpaceResultData] = useState<SpaceResultData>();
   const [selectedMember, setSelectedMember] = useState(spaceResultData?.participantResults[0]);
 
   useEffect(() => {
     const fetchSpaceResult = async () => {
-      if (spaceId === undefined) return;
-      const spaceResult = await space.getSpaceResult(spaceId,spaceAuth.getToken(spaceId));
-      if (!spaceResult) return;
-      setSpaceResultData(spaceResult);
+      if(spaceId === undefined) return;
+      try {
+        const spaceResult = await space.getSpaceResult(spaceId,spaceAuth.getToken(spaceId));
+        if (!spaceResult) return;
+        setSpaceResultData(spaceResult);
+        setSelectedMember(spaceResult.participantResults[0]);
+      }
+      catch (error) {
+        console.error('Failed to fetch space result:', error);
+        alert(error); // TODO : ALERT VISUALIZATION
+      }
     }
     
-    if (!spaceResult) {
+    if (!result) {
       fetchSpaceResult();
     }
     else {
-      setSpaceResultData(spaceResult);
+      setSpaceResultData(result);
+      setSelectedMember(result?.participantResults[0]);
     }
-    setSelectedMember(spaceResultData?.participantResults[0]);
-  }, [spaceResultData,spaceId]);
+  }, [spaceId,result]);
 
   
   const getChartData = (member: typeof selectedMember) => ({
@@ -88,13 +95,23 @@ const IndividualResultsPage = () => {
   return (
     <div className="min-h-screen py-12 px-4">
       <div className="max-w-6xl mx-auto">
-        <button
-          onClick={() => navigate(`/space/${spaceId}/results/overall`, { state: { spaceResultData } })}
-          className="mb-8 flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors"
-        >
-          <ArrowLeft className="h-4 w-4" />
-          Back to Overall Results
-        </button>
+        {spaceResultData ? (
+          <button
+            onClick={() => navigate(`/space/${spaceId}/results/overall`, { state: { spaceResultData } })}
+            className="mb-8 flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            Back to Overall Results
+          </button>
+        ) : (
+          <button
+            onClick={() => navigate(`/space/${spaceId}/results/overall`)}
+            className="mb-8 flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            Back to Overall Results
+          </button>
+        )}
 
         <div className="bg-white rounded-2xl shadow-xl p-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-8 flex items-center gap-3">

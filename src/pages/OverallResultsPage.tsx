@@ -35,19 +35,22 @@ const OverallResultsPage = () => {
 
   useEffect(() => {
     const fetchSpaceResult = async () => {
-      if(spaceId === undefined) return;
-      const spaceResult = await space.getSpaceResult(spaceId,spaceAuth.getToken(spaceId));
-      setSpaceResult(spaceResult);
+      if (spaceId === undefined) return;
+      try {
+        const spaceResult = await space.getSpaceResult(spaceId, spaceAuth.getToken(spaceId));
+        setSpaceResult(spaceResult);
+      } catch (error) {
+        console.error("Failed to fetch space result:", error);
+        alert(error); // TODO : ALERT VISUALIZATION
+      }
     };
-    
-    if(result) {
+
+    if (result) {
       setSpaceResult(result);
-    }
-    else {
+    } else {
       fetchSpaceResult();
     }
-
-  }, [result,spaceId]);
+  }, [spaceId, result]);
 
   const chartData = {
     labels: spaceResult?.participantResults.map((p) => p.participantName) || [],
@@ -155,12 +158,17 @@ const OverallResultsPage = () => {
           </div>
 
           <div className="text-center">
-            <button
+            {spaceResult ? (<button
               onClick={() => navigate(`/space/${spaceId}/results/individual`, { state: { spaceResult } })} 
               className="px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg hover:shadow-lg transition-all duration-300"
             >
               View Individual Results
-            </button>
+            </button>) : (<button
+              onClick={() => navigate(`/space/${spaceId}/results/individual`)} 
+              className="px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg hover:shadow-lg transition-all duration-300"
+            >
+              View Individual Results
+            </button>)}
           </div>
         </div>
       </div>
