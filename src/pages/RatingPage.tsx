@@ -153,7 +153,7 @@ const RatingPage = () => {
             </p>
           </div>
           <button
-            onClick={() => navigate('/')}
+            onClick={() => navigate('/space/'+ spaceId +'/select-action')}
             className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
           >
             <X className="h-5 w-5 text-gray-500" />
