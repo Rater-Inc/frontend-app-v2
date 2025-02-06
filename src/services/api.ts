@@ -57,6 +57,18 @@ export const api = {
             return null;
         }
     },
+
+    getSpaceResult: async (spaceLink:string , token:string) => {
+        try {
+            apiClient.defaults.headers["Authorization"] = `Bearer ${token}`;
+            const response = await apiClient.post(`api/Space/space-result?link=${spaceLink}`);
+            return response;
+        }
+        catch (error) {
+            console.error("Error getting space result:", error);
+            return null;
+        }
+    }
 };
 
 export const createSpace = async (spaceData: SpaceData) => {
@@ -76,8 +88,7 @@ export const submitRatings = async (ratings: Rating , token: string) => {
     try {
         apiClient.defaults.headers["Authorization"] = `Bearer ${token}`;
         const response = await apiClient.post("api/Space/add-ratings", ratings);
-        localStorage.setItem('space-info', JSON.stringify(response.data));
-        return response.data;
+        return response;
     }
     catch (error) {
         console.error("Error submitting ratings:", error);

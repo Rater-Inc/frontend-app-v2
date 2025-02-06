@@ -1,6 +1,8 @@
+import { SpaceInfoCollection } from "../types/types";
+
 export const storage = {
-  getSpaceInfo: () => {
+  getSpaceInfo: (): SpaceInfoCollection => {
     const space = JSON.parse(localStorage.getItem('space-info') || '{}');
-    return space;
+    return space as SpaceInfoCollection;
   },
 };
