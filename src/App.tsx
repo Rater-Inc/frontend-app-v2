@@ -1,18 +1,17 @@
-import React from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import LandingPage from "./pages/LandingPage";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import CreateSpacePage from "./pages/CreateSpacePage";
-import SelectionPage from "./pages/SelectionPage";
-import RatingPage from "./pages/RatingPage";
-import OverallResultsPage from "./pages/OverallResultsPage";
+import EnterSpaceIdPage from "./pages/EnterSpaceIdPage";
 import IndividualResultsPage from "./pages/IndividualResultsPage";
 import JoinSpacePage from "./pages/JoinSpacePage";
-import EnterSpaceIdPage from "./pages/EnterSpaceIdPage";
+import LandingPage from "./pages/LandingPage";
 import NotFoundPage from "./pages/NotFoundPage";
+import OverallResultsPage from "./pages/OverallResultsPage";
+import RatingPage from "./pages/RatingPage";
+import SelectionPage from "./pages/SelectionPage";
 
 import { ProtectedRoute } from "./components/ProtectedRoute";
 
-function App() {
+const App = () => {
     return (
         <div className="min-h-screen relative bg-gradient-to-br from-purple-500/30 to-pink-500/30 ">
             {/* Background container */}
@@ -42,6 +41,14 @@ function App() {
                         <Route
                             path="/join/:spaceId"
                             element={<JoinSpacePage />}
+                        />
+                        <Route
+                            path="/space/:spaceId"
+                            element={<Navigate to="/space/:spaceId/select-action" replace />}
+                        />
+                        <Route
+                            path="/:spaceId"
+                            element={<Navigate to="/space/:spaceId/select-action" replace />}
                         />
                         <Route
                             path="/space/:spaceId/select-action"
@@ -81,6 +88,6 @@ function App() {
             </div>
         </div>
     );
-}
+};
 
 export default App;
