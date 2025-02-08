@@ -220,16 +220,17 @@ const RatingPage = () => {
               disabled={!hasAllRatings}
               className="px-6 py-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg hover:shadow-lg transition-all duration-300 flex items-center gap-2 disabled:opacity-50"
             >
+              
+              {isLoading ? (
+                <div className="h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+              ) : null}
               {isLastMember
                 ? isLoading
-                  ? ''
+                  ? 'Submitting...'
                   : 'Submit'
                 : isLoading
                   ? ''
                   : 'Next'}
-              {isLoading ? (
-                <div className="h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-              ) : null}
               {!isLastMember && <ChevronRight className="h-4 w-4" />}
             </button>
           </div>
