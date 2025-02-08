@@ -159,7 +159,7 @@ const IndividualResultsPage = () => {
                   <div key={metric.id} className="bg-gray-50 p-4 rounded-xl">
                     <h4 className="text-sm font-medium text-gray-900">{metric.name}</h4>
                     <p className="text-2xl font-bold text-purple-600">
-                      {selectedMember?.averageScore.toFixed(1)}/5
+                      {selectedMember?.metricResults.find(e => e.metricId == metric.id)?.averageMetricScore.toFixed(1)}/5
                     </p>
                   </div>
                 ))}
