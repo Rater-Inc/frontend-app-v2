@@ -4,6 +4,7 @@ import { SpaceData } from "../../types/types";
 
 import { useNavigate } from "react-router-dom";
 import { createSpace } from "../../services/api";
+import { spaceAuth } from "../../services/auth";
 // import { create } from "domain";
 
 interface ReviewSpaceProps {
@@ -25,6 +26,8 @@ const ReviewSpace: React.FC<ReviewSpaceProps> = ({
     try {
       const response = await createSpace(data);
       setSpaceUrl(response.link);
+      const { token } = await spaceAuth.verifyPassword(response.link, data.password);
+      spaceAuth.setToken(response.spaceId, token);
     } catch (error) {
       console.error("Failed to create space:", error);
       // Handle error appropriately
