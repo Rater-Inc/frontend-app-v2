@@ -91,11 +91,11 @@ const OverallResultsPage = () => {
     <div className="min-h-screen py-12 px-4">
       <div className="max-w-6xl mx-auto">
         <button
-          onClick={() => navigate(`/space/${spaceId}/rate`)}
+          onClick={() => navigate(`/space/${spaceId}/select-action`)}
           className="mb-8 flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors"
         >
           <ArrowLeft className="h-4 w-4" />
-          Back to Ratings
+          Back to Space
         </button>
 
         <div className="bg-white rounded-2xl shadow-xl p-8">
