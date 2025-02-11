@@ -10,17 +10,12 @@ const EnterSpaceIdPage = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    api.getSpaceName(spaceId.trim()).then((response) => {
+    const trimmedSpaceId = spaceId.trim();
+    api.getSpaceName(trimmedSpaceId).then((response) => {
       navigate(`/join/${spaceId.trim()}` , {state : { space:response.data }});
     }).catch((error) => {
-        setError("Space ID not found " + error);
-        navigate(`/`);
+        setError("Space with this ID does not exist");
     });
-    if (spaceId.trim()) {
-      navigate(`/join/${spaceId.trim()}`);
-    } else {
-      setError('Space ID is required');
-    }
   };
 
   return (
