@@ -68,6 +68,12 @@ export const api = {
             console.error("Error getting space result:", error);
             return null;
         }
+    },
+
+    getSpaceName: async (spaceLink : string) => {
+            const response = await apiClient.get(`api/Space/get-space-name-by-link?link=${spaceLink}`);
+            if (response.status == 200) return response.data;
+            throw new Error("Error getting space name");
     }
 };
 
