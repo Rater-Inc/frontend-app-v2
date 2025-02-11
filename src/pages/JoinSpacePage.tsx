@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { KeyRound, ArrowLeft ,Check} from 'lucide-react';
 import { spaceAuth } from '../services/auth';
@@ -11,7 +11,9 @@ const JoinSpacePage = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [spaceName, setSpaceName] = useState('');
 
+  const space = location.state?.space;
 
   const handleSubmit = async (e: React.FormEvent) => {
     setIsLoading(true);
@@ -26,6 +28,29 @@ const JoinSpacePage = () => {
       setError('Invalid password');
     }
   };
+
+  useEffect(() => {
+    if(!spaceId) return;
+
+    const fetchSpaceName = async () => {
+      api.getSpaceName(spaceId).then((response) => {
+        debugger;
+        console.log(response);
+        setSpaceName(response);
+      }).catch((error) => {
+        console.error('Failed to fetch space name:', error);
+        navigate('/enter-space')
+      });
+    }
+
+    if(!space) {
+      fetchSpaceName();
+    }
+    else {
+      setSpaceName(space);
+    }
+
+  }, [spaceId]);
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4">
@@ -42,7 +67,7 @@ const JoinSpacePage = () => {
           <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 p-4 mb-4">
             <KeyRound className="w-8 h-8 text-white" />
           </div>
-          <h1 className="text-2xl font-bold text-gray-900">Join Space</h1>
+          <h1 className="text-2xl font-bold text-gray-900">Join Space '{spaceName}'</h1>
           <p className="text-gray-600 mt-2">Enter the space password to continue</p>
         </div>
 

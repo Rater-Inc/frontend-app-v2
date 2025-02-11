@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { KeyRound, ArrowLeft } from 'lucide-react';
+import { api } from '../services/api';
 
 const EnterSpaceIdPage = () => {
   const navigate = useNavigate();
@@ -9,6 +10,12 @@ const EnterSpaceIdPage = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    api.getSpaceName(spaceId.trim()).then((response) => {
+      navigate(`/join/${spaceId.trim()}` , {state : { space:response.data }});
+    }).catch((error) => {
+        setError("Space ID not found " + error);
+        navigate(`/`);
+    });
     if (spaceId.trim()) {
       navigate(`/join/${spaceId.trim()}`);
     } else {
