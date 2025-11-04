@@ -34,8 +34,6 @@ const JoinSpacePage = () => {
 
     const fetchSpaceName = async () => {
       api.getSpaceName(spaceId).then((response) => {
-        debugger;
-        console.log(response);
         setSpaceName(response);
       }).catch((error) => {
         console.error('Failed to fetch space name:', error);
